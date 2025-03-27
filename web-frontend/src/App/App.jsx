@@ -112,11 +112,6 @@ const App = () => {
                     </div>
                 </div>
                 <div className={styles.spacer}></div>
-                <img
-                    className={styles.waveImageFooter}
-                    src="/wave2.png"
-                    alt="Wave design"
-                />
             </div>
 
             <div className={styles.footer}></div>
