@@ -1,6 +1,10 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: #eee;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 * {

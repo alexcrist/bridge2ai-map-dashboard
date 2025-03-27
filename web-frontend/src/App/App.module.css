@@ -1,5 +1,9 @@
+:root {
+    --iframe-zoom: 0.7;
+}
+
 .container {
-    width: 100dvw;
+    width: 100vw;
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
@@ -9,6 +13,7 @@
     background-color: #01003a;
     display: flex;
     flex-direction: column;
+    z-index: 2;
 }
 
 .headerGradientLine {
@@ -67,7 +72,7 @@
     margin-right: 25px;
 }
 
-.waveImage {
+.waveImageHeader {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -76,12 +81,111 @@
 }
 
 .content {
+    position: relative;
+    flex: 1;
+    padding: 20px 40px 0 20px;
+    background-color: #fefeff;
+    max-width: 1210px;
+    align-self: center;
+    box-shadow: 0 0 10px #00000033;
+}
+
+.contentItem {
+    display: flex;
+}
+
+.contentItemLeft {
+    margin-right: 20px;
+    width: 10px;
+    min-width: 10px;
+    align-self: stretch;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, #5934b5, #315eb8);
+}
+
+.contentItemRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.contentTitle {
+    font-weight: 700;
+    font-size: 20px;
+    margin: 0 0 5px 0;
+}
+
+.contentSubtitle {
+    font-size: 16px;
+    font-weight: 400px;
+    margin: 0 0 15px 0;
+}
+
+.contentPreviewDescription {
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.contentLink {
+    margin-right: 15px;
+    margin-bottom: 5px;
+    float: left;
+}
+
+.contentImage {
+    width: 320px;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 4px;
+    background: #020139;
+}
+
+.contentImage:hover {
+    opacity: 0.7;
+}
+
+.spacer {
     flex: 1;
 }
 
+.waveImageFooter {
+    mix-blend-mode: multiply;
+    width: calc(100% + 60px);
+    margin-left: -20px;
+    opacity: 0.3;
+    transform: scaleX(-1);
+    margin-top: 50px;
+    justify-self: flex-end;
+    margin-bottom: -5px;
+}
+
 .footer {
-    height: 10px;
+    z-index: 2;
+    height: 20px;
     background: linear-gradient(to right, #5934b5, #315eb8);
+}
+
+.statCards {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pieCharts {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.loading {
+    font-style: italic;
+    color: #01003a;
+    opacity: 0.9;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1;
+    margin-top: 20px;
 }
 
 @media (max-width: 500px) {
