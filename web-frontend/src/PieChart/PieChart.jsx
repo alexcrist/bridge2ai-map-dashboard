@@ -6,7 +6,7 @@ import styles from "./PieChart.module.css";
 //       this value
 const CHART_RADIUS = 110;
 
-const MAX_LEGEND_ITEMS = 5;
+const MAX_LEGEND_ITEMS = 100;
 
 const INNER_RADIUS = CHART_RADIUS / 2;
 const CHART_MARGIN = 20;

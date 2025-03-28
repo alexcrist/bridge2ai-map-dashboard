@@ -92,8 +92,10 @@
 
 .legendItem {
     display: flex;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-size: 14px;
+    max-width: 200px;
+    align-items: center;
 }
 
 .ellipsis {
