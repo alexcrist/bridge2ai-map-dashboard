@@ -15,7 +15,8 @@ const ANGLE_GAP_RADIANS = (ANGLE_GAP_DEGREES / 180) * Math.PI;
 
 const COLOR_HUES = [
     // Primaries
-    0, 120, 240,
+    // 0 - no red
+    120, 240,
     // Secondaries
     60, 180, 300,
     // Tertiaries
