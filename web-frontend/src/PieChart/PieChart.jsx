@@ -14,17 +14,21 @@ const ANGLE_GAP_DEGREES = 3;
 const ANGLE_GAP_RADIANS = (ANGLE_GAP_DEGREES / 180) * Math.PI;
 
 const COLOR_HUES = [
-    // Primaries
-    // 0 - no red
+    // Primaries (but skip red)
     120, 240,
     // Secondaries
     60, 180, 300,
     // Tertiaries
     30, 90, 150, 210, 270,
 ];
+const OTHER_HUES = [15, 45, 75, 105, 135, 165, 195, 225, 255, 285, 315, 345];
 const COLORS = COLOR_HUES.map((hue) => {
     return chroma.hsl(hue, 0.7, 0.7).hex();
-});
+}).concat(
+    OTHER_HUES.map((hue) => {
+        return chroma.hsl(hue, 0.4, 0.72).hex();
+    }),
+);
 
 const PieChart = ({ title, data }) => {
     // Calculate pie chart slice shapes and colors
