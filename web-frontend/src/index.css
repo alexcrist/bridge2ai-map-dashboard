@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #eee;
-    width: 100vw;
+    width: 100dvw;
     overflow-x: hidden;
     overflow-y: auto;
 }

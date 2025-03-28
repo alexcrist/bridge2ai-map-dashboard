@@ -57,6 +57,9 @@ const App = () => {
                                     src="voicedatagovernance.png"
                                     alt="Voice data governance website screenshot"
                                 />
+                                <p className={styles.contentLinkUrl}>
+                                    https://map.b2ai-voice.org/
+                                </p>
                             </a>
                             {"\t"}This map tracks publicly accessible speech and
                             voice datasets collected for neurological, mood, and
@@ -111,9 +114,7 @@ const App = () => {
                         </div>
                     </div>
                 </div>
-                <div className={styles.spacer}></div>
             </div>
-
             <div className={styles.footer}></div>
         </div>
     );

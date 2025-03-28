@@ -1,10 +1,12 @@
 import chroma from "chroma-js";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./PieChart.module.css";
 
 // Note: there is matching --chart-radius value in the CSS which must match
 //       this value
-const CHART_RADIUS = 150;
+const CHART_RADIUS = 110;
+
+const MAX_LEGEND_ITEMS = 5;
 
 const INNER_RADIUS = CHART_RADIUS / 2;
 const CHART_MARGIN = 20;
@@ -93,38 +95,50 @@ const PieChart = ({ title, data }) => {
 
     // Upon hovering SVG (show / hide tooltip)
     const svgRef = useRef(null);
-    const [hoveredMousePosition, setHoveredMousePosition] = useState(null);
-    const onMouseMoveSvg = useCallback((event) => {
-        if (
-            svgRef.current &&
-            event.target.tagName === "path" &&
-            svgRef.current.contains(event.target)
-        ) {
-            setHoveredMousePosition({
-                x: event.clientX,
-                y: event.clientY,
-            });
-        } else {
-            setHoveredMousePosition(null);
-        }
-    }, []);
-    const onMouseLeaveSvg = useCallback(
-        () => setHoveredMousePosition(null),
-        [],
-    );
-
-    // Upon hovering SVG path (set tooltip content)
     const [hoveredItem, setHoveredItem] = useState(null);
-    const onMouseMoveSegment = useCallback(
-        (item) => {
-            return () => {
-                if (item?.id !== hoveredItem?.id) {
+    const [hoveredMousePosition, setHoveredMousePosition] = useState(null);
+    const onMouseLeaveSvg = useCallback(() => {
+        setHoveredItem(null);
+        setHoveredMousePosition(null);
+    }, []);
+    useEffect(() => {
+        const onMouse = (event) => {
+            if (
+                svgRef.current &&
+                event.target.tagName === "path" &&
+                svgRef.current.contains(event.target)
+            ) {
+                setHoveredMousePosition({
+                    x: event.clientX,
+                    y: event.clientY,
+                });
+                const id = event.target?.id;
+                const item = chartData.find((item) => item.id === id);
+                if (item) {
                     setHoveredItem(item);
                 }
+            } else {
+                setHoveredItem(null);
+                setHoveredMousePosition(null);
+            }
+        };
+        const onTouchStart = (event) => {
+            const mouseEvent = {
+                target: event.target,
+                clientX: event.touches[0].clientX,
+                clientY: event.touches[0].clientY,
             };
-        },
-        [hoveredItem?.id],
-    );
+            onMouse(mouseEvent);
+        };
+        document.addEventListener("touchstart", onTouchStart);
+        document.addEventListener("mousedown", onMouse);
+        document.addEventListener("mousemove", onMouse);
+        return () => {
+            document.removeEventListener("touchstart", onTouchStart);
+            document.removeEventListener("mousedown", onMouse);
+            document.removeEventListener("mousemove", onMouse);
+        };
+    }, [chartData]);
 
     return (
         <div className={styles.pieChartContainer}>
@@ -132,7 +146,6 @@ const PieChart = ({ title, data }) => {
             <div className={styles.pieChart}>
                 <svg
                     ref={svgRef}
-                    onMouseMove={onMouseMoveSvg}
                     onMouseLeave={onMouseLeaveSvg}
                     className={styles.svg}
                     width={(CHART_RADIUS + CHART_MARGIN) * 2}
@@ -160,10 +173,9 @@ const PieChart = ({ title, data }) => {
                             `A${INNER_RADIUS},${INNER_RADIUS} 0 ${largeArc} 0 ${x1i},${y1i}`,
                             `Z`,
                         ].join(" ");
-
                         return (
                             <path
-                                onMouseMove={onMouseMoveSegment(item)}
+                                id={item.id}
                                 className={styles.path}
                                 key={id}
                                 d={d}
@@ -178,21 +190,41 @@ const PieChart = ({ title, data }) => {
                     <div
                         className={styles.tooltip}
                         style={{
-                            left: `${hoveredMousePosition.x + 15}px`,
-                            top: `${hoveredMousePosition.y - 15}px`,
+                            left: `${hoveredMousePosition.x}px`,
+                            top: `${hoveredMousePosition.y - 20}px`,
                         }}
                     >
-                        <div
-                            className={styles.tooltipColor}
-                            style={{
-                                background: hoveredItem?.fillColor,
-                                border: `2px solid ${hoveredItem?.borderColor}`,
-                            }}
-                        />
-                        {hoveredItem?.id}: {hoveredItem?.value}
+                        <div className={styles.tooltipInner}>
+                            <div
+                                className={styles.tooltipColor}
+                                style={{
+                                    background: hoveredItem?.fillColor,
+                                    border: `2px solid ${hoveredItem?.borderColor}`,
+                                }}
+                            />
+                            {hoveredItem?.id}: {hoveredItem?.value}
+                        </div>
                     </div>
                 )}
-                <div className={styles.legend}>LEGEND GOES HERE</div>
+                <div className={styles.legend}>
+                    {chartData.slice(0, MAX_LEGEND_ITEMS).map((item) => {
+                        return (
+                            <div className={styles.legendItem} key={item.id}>
+                                <div
+                                    className={styles.tooltipColor}
+                                    style={{
+                                        background: item?.fillColor,
+                                        border: `2px solid ${item?.borderColor}`,
+                                    }}
+                                />
+                                {item.id}: {item.value}
+                            </div>
+                        );
+                    })}
+                    {chartData.length > MAX_LEGEND_ITEMS && (
+                        <div className={styles.ellipsis}>...</div>
+                    )}
+                </div>
             </div>
         </div>
     );

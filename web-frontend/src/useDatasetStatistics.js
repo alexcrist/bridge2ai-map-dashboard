@@ -149,7 +149,7 @@ const getPieChart = ({ title, counter, skipKeys = [] }) => {
             };
         })
         .filter(({ id }) => !skipKeys.includes(id))
-        .sortBy("value")
+        .orderBy(["value"], ["desc"])
         .value();
     return { title, data };
 };
